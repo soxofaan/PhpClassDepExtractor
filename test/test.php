@@ -105,6 +105,7 @@ $filename = dirname(__FILE__) . '/data/file02.php';
 $expected = array('Foo' => array('Bar'), 'Hoo' => array('Foo'));
 $t->is(PhpClassDepExtractor::extractFromFile($filename), $expected);
 
+
 try {
 	// Trigger duplicate definition error.
 	$filenames = array(dirname(__FILE__) . '/data/file01.php', dirname(__FILE__) . '/data/file01.php');

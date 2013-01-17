@@ -8,6 +8,8 @@
  */
 
 // TODO: option to stop parsing a file on first hit
+// TODO: add housekeeping of original input file names and provide functionality to transform class dependencies to file dependencies.
+// TODO: drop staticness (which is probably requirement for above todo's)
 
 class PhpClassDepExtractionException extends Exception {}
 
