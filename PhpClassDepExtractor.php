@@ -22,8 +22,7 @@ class PhpClassDepExtractor {
 	 * to whitespace or comments. If index reaches end of token
 	 * array, null is returned.
 	 */
-	private static function _skipWhiteSpaceAndComments($tokens, $i)
-	{
+	private static function _skipWhiteSpaceAndComments($tokens, $i) {
 		$size = count($tokens);
 		while (
 			$i < $size
@@ -38,8 +37,39 @@ class PhpClassDepExtractor {
 	}
 
 	/**
+	 * Extract classes/interfaces and their dependencies from a given PHP file.
+	 *
+	 * @param string $filename
+	 * @return array mapping class/interface names to arrays of classes/interfaces they depend on
+	 */
+	public static function extractFromFile($filename) {
+		$sourceCode = file_get_contents($filename);
+		return self::extractFromSourceCode($sourceCode);
+	}
+
+	/**
+	 * Extract classes/interfaces and their dependencies from given PHP files.
+	 *
+	 * @param array $filenames
+	 * @return array mapping class/interface names to arrays of classes/interfaces they depend on
+	 */
+	public static function extractFromFiles(array $filenames) {
+		$classes = array();
+		foreach ($filenames as $filename) {
+			foreach (self::extractFromFile($filename) as $name => $dependencies) {
+				if (isset($classes[$name])) {
+					throw new PhpClassDepExtractionException("Multiple definitions found for '$name'");
+				}
+				$classes[$name] = $dependencies;
+			}
+		}
+		return $classes;
+	}
+
+	/**
 	 * Extract classes/interfaces and their dependencies from a PHP source code
 	 * @param string $sourceCode
+	 * @return array mapping class/interface names to arrays of classes/interfaces they depend on
 	 */
 	public static function extractFromSourceCode($sourceCode) {
 		$classes = array();
