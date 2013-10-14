@@ -19,7 +19,12 @@ class PhpClassHierarchy extends PhpClassDepExtractor
         error_reporting(0);
         $this->parseOptions($argv);
         $this->classes = $this->getClasses();
-        echo json_encode($this->rc_search(self::$argv));
+        $result = $this->rc_search(self::$argv);
+        $has_jsontool = shell_exec('which json');
+        if (empty($has_jsontool))
+            var_export($result);
+        else
+            echo json_encode($result);
     }
     
     private function rc_search($q = array(), $level = 0)
